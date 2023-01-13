@@ -87,7 +87,7 @@ def orate(synid: str):
     general =  (
         f"{annotations['HTANDataFileID'][0]} is a {assay} file submitted by the {htan_centers[center_id]} center "
         f"of a {first_lower(biospecimen['Acquisition_Method_Type'][0])} (Biospecimen {biospecimen_id}) "
-        f"from a {days_to_age(biospecimen['Collection_Days_from_Index'][0])} {demographics['Gender'][0]} "
+        f"from a {days_to_age(biospecimen['Collection_Days_from_Index'][0])} year old {demographics['Gender'][0]} "
         f"(Participant {participant_id}) "
         f"diagnosed with {first_lower(diagnosis['Primary_Diagnosis'][0])}. "
     )
