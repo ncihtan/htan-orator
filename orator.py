@@ -61,8 +61,6 @@ def orate(synid: str):
     # Get annotations
     annotations = syn.get_annotations(synid)
 
-    pixels = int(annotations['SizeX'][0])*int(annotations['SizeY'][0])*int(annotations['SizeZ'][0])
-
     # Get biospecimen information
     biospecimen_id = annotations['HTANParentBiospecimenID'][0]
     biospecimen = get_bq_table(biospecimen_id, 'HTAN_Biospecimen_Id', 'Biospecimen')
@@ -81,8 +79,13 @@ def orate(synid: str):
 
     center_id = re.match('HTA\d+', biospecimen_id).group(0)
 
+    if annotations['Component'][0] == 'ImagingLevel2':
+        assay = annotations['ImagingAssayType'][0]
+    else:
+        assay = annotations['Component'][0]
+
     general =  (
-        f"{annotations['HTANDataFileID'][0]} is a {annotations['ImagingAssayType'][0]} image submitted by the {htan_centers[center_id]} center "
+        f"{annotations['HTANDataFileID'][0]} is a {assay} file submitted by the {htan_centers[center_id]} center "
         f"of a {first_lower(biospecimen['Acquisition_Method_Type'][0])} (Biospecimen {biospecimen_id}) "
         f"from a {days_to_age(biospecimen['Collection_Days_from_Index'][0])} {demographics['Gender'][0]} "
         f"(Participant {participant_id}) "
@@ -90,6 +93,9 @@ def orate(synid: str):
     )
 
     if annotations['Component'][0] == 'ImagingLevel2':
+
+        pixels = int(annotations['SizeX'][0])*int(annotations['SizeY'][0])*int(annotations['SizeZ'][0])
+
         imaging = (
             f"The image contains {annotations['SizeC'][0]} channels, approximately {human_format(pixels)} pixels, and measures "
             f"{ceil(int(annotations['SizeX'][0])*float(annotations['PhysicalSizeX'][0]))} {annotations['PhysicalSizeXUnit'][0]} wide "
