@@ -11,6 +11,8 @@ Requires `bigquery.Client()` to authenticate to the `htan-dcc` project
 
 ## Usage
 
+The `orate` function takes a Synapse ID for a HTAN data file and returns a short natural language description of the file, biospecimen, participant demographics and diagnosis.
+
 ```
 import orator
 
