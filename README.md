@@ -10,10 +10,10 @@ import orator
 orator.orate('syn24829433')
 ```
 
-returns the following (inserted elements in ***bold italic***)
+returns the following (inserted elements in <u>***underlined bold italic***</u>)
 
->'***HTA9_1_19362*** is a ***mIHC*** file submitted by the ***HTAN OHSU*** center of a ***biopsy*** (Biospecimen ***HTA9_1_17***) from a ***70*** year old ***female*** (Participant ***HTA9_1***) diagnosed with i***nfiltrating duct carcinoma NOS***. 
-The image contains **12** channels, approximately ***8.96M*** pixels, and measures ***1939*** ***µm*** wide by ***1157*** ***µm*** high. It was acquired on a ***Leica, Aperio AT2*** at ***20***x magnification
+>'<u>***HTA9_1_19362***</u> is a <u>***mIHC***</u> file submitted by the <u>***HTAN OHSU***</u> center of a <u>***biopsy***</u> (Biospecimen<u>***HTA9_1_17***</u>) from a <u>***70***</u> year old <u>***female***</u> (Participant <u>***HTA9_1***</u>) diagnosed with <u>***infiltrating duct carcinoma NOS***</u>. 
+The image contains <u>**12**</u> channels, approximately <u>***8.96M***</u> pixels, and measures <u>***1939***</u><u>***µm***</u> wide by <u>***1157***</u><u>***µm***</u> high. It was acquired on a <u>***Leica, Aperio AT2***</u> at <u>***20***</u>x magnification
 
 Other examples
 
