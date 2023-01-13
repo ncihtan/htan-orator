@@ -2,7 +2,14 @@
 
 This repo holds scripts to describe HTAN data in natural language
 
-# Usage
+## Requirements
+
+Module requirements in the conda environment.yml file
+
+Requires `syn.login()` to pass (eg with credentials in `~/.synapseCreds`)  
+Requires `bigquery.Client()` to authenticate to the `htan-dcc` project
+
+## Usage
 
 ```
 import orator
