@@ -1,0 +1,75 @@
+import re
+import pandas as pd
+from math import log, floor, ceil
+
+from google.cloud import bigquery
+bigquery_client = bigquery.Client()
+
+import synapseclient
+syn = synapseclient.Synapse()
+syn.login()
+
+def get_bq_table ( id, id_col, component):
+    print(f'Getting {component} information from {id}')
+
+    query = f"""
+    SELECT * FROM `htan-dcc.combined_assays.{component}`
+    WHERE {id_col} = '{id}'
+    """
+
+    results = bigquery_client.query(query).to_dataframe().to_dict()
+
+    return(results)
+
+def days_to_age (days):
+    age = floor(int(days)/365)
+    return(age)
+
+
+
+
+def human_format(number):
+    units = ['', 'K', 'M', 'G', 'T', 'P']
+    k = 1000.0
+    magnitude = int(floor(log(number, k)))
+    return '%.2f%s' % (number / k**magnitude, units[magnitude])
+
+def first_lower(s):
+    if not s: # Added to handle case where s == None
+        return 
+    else:
+        return s[0].lower() + s[1:]
+
+def orate(synid: str):
+    '''Takes a Synapse ID of a HTAN Data File and returns a natural language description of the dataset'''
+    # Get annotations
+    annotations = syn.get_annotations(synid)
+
+    pixels = int(annotations['SizeX'][0])*int(annotations['SizeY'][0])*int(annotations['SizeZ'][0])
+
+    # Get biospecimen information
+    biospecimen_id = annotations['HTANParentBiospecimenID'][0]
+    biospecimen = get_bq_table(biospecimen_id, 'HTAN_Biospecimen_Id', 'Biospecimen')
+
+
+    # Extract particpant ID
+    participant_id = re.match('HTA\d+\_\d+', biospecimen_id).group(0)
+
+    # Get demographics information
+    demographics = get_bq_table(participant_id, 'HTAN_Participant_Id', 'Demographics')
+
+    # Get diagnosis information
+    diagnosis = get_bq_table(participant_id, 'HTAN_Participant_Id', 'Diagnosis')
+
+    oration =  (
+        f"{annotations['HTANDataFileID'][0]} is a {annotations['ImagingAssayType'][0]} image of a {first_lower(biospecimen['Acquisition_Method_Type'][0])} "
+        f"(Biospecimen {biospecimen_id}) "
+        f"from a {days_to_age(biospecimen['Collection_Days_from_Index'][0])} {demographics['Gender'][0]} "
+        f"(Participant {participant_id}) "
+        f"diagnosed with {first_lower(diagnosis['Primary_Diagnosis'][0])}. "
+        f"The image contains {annotations['SizeC'][0]} channels, approximately {human_format(pixels)} pixels, and measures "
+        f"{ceil(int(annotations['SizeX'][0])*float(annotations['PhysicalSizeX'][0]))} {annotations['PhysicalSizeXUnit'][0]} wide "
+        f"by {ceil(int(annotations['SizeY'][0])*float(annotations['PhysicalSizeY'][0]))} {annotations['PhysicalSizeYUnit'][0]} high"
+
+    )
+    return(oration)
