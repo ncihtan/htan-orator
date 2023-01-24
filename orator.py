@@ -1,3 +1,4 @@
+import sys
 import re
 import pandas as pd
 from math import log, floor, ceil
@@ -100,7 +101,7 @@ def orate(synid: str):
             f"The image contains {annotations['SizeC'][0]} channels, approximately {human_format(pixels)} pixels, and measures "
             f"{ceil(int(annotations['SizeX'][0])*float(annotations['PhysicalSizeX'][0]))} {annotations['PhysicalSizeXUnit'][0]} wide "
             f"by {ceil(int(annotations['SizeY'][0])*float(annotations['PhysicalSizeY'][0]))} {annotations['PhysicalSizeYUnit'][0]} high. "
-            f"It was acquired on a {annotations['Microscope'][0]} microscope at {annotations['NominalMagnification'][0]}x magnification"
+            f"It was acquired on a {annotations['Microscope'][0]} microscope at {annotations['NominalMagnification'][0]}x magnification."
         )
 
         oration = "\n".join([general, imaging])
@@ -109,3 +110,13 @@ def orate(synid: str):
         oration = general
 
     return(oration)
+
+def main():
+    synid = sys.argv[1]
+
+    oration = orate(synid)
+    print(oration)
+
+
+if __name__ == '__main__':
+    main()
