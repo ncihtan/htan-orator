@@ -1,4 +1,4 @@
-## {data_file_id}
+## **{data_file_id}**
 
 {data_file_id} is a {imaging_assay_type} image contributed by the {htan_center} center.
 
