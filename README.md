@@ -53,10 +53,18 @@ Both methods require a valid Google Cloud service account and Synapse credential
 
 ## Examples
 
+### Example 1: Default
+
+Python:
+
 ```
 import orator
 
 orator.orate('syn24829433')
+```
+CLI:
+```
+python orate.py syn24829433
 ```
 
 returns the following (inserted elements in <u>**_underlined bold italic_**</u>)
@@ -64,10 +72,17 @@ returns the following (inserted elements in <u>**_underlined bold italic_**</u>)
 > '<u>**_HTA9_1_19362_**</u> is a <u>**_mIHC_**</u> file submitted by the <u>**_HTAN OHSU_**</u> center of a <u>**_biopsy_**</u> (Biospecimen<u>**_HTA9_1_17_**</u>) from a <u>**_70_**</u> year old <u>**_female_**</u> (Participant <u>**_HTA9_1_**</u>) diagnosed with <u>**_infiltrating duct carcinoma NOS_**</u>.
 > The image contains <u>**12**</u> channels, approximately <u>**_8.96M_**</u> pixels, and measures <u>**_1939_**</u><u>**_µm_**</u> wide by <u>**_1157_**</u><u>**_µm_**</u> high. It was acquired on a <u>**_Leica, Aperio AT2_**</u> at <u>**_20_**</u>x magnification
 
+### Example 2: MITI for Minerva
+
+
 ```
 import orator
 
 orator.orate_miti('syn24829433')
+```
+CLI:
+```
+python orate.py syn24829433 --miti
 ```
 
 returns the following
@@ -137,7 +152,7 @@ returns the following
 > | HTAN Assayed Biospecimen ID     | HTA9_1_17    |
 > | HTAN Originating Biospecimen ID | HTA9_1_6     |
 
-### Other examples
+### Further examples
 
 | Input       | Output                                                                                                                                                                                                                                                                                                                                                                             |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
