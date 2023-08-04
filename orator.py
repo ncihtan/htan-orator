@@ -167,12 +167,12 @@ def orate_miti(synid: str):
     dictionary = {
         "age_at_diagnosis": days_to_age(diagnosis["Age_at_Diagnosis"][0]),
         "primary_diagnosis": diagnosis["Primary_Diagnosis"][0],
-        "site_of_resection_or_biopsy": "Unknown",  # not exposed in htan-dcc.combined_assays.Biospecimen at the moment,
+        "site_of_resection_or_biopsy": "Not avaliable",  # not exposed in htan-dcc.combined_assays.Biospecimen at the moment,
         "tumor_grade": diagnosis["Tumor_Grade"][0],
         "stage_at_diagnosis": diagnosis["AJCC_Pathologic_Stage"][0],
         "species": "Human",
         "vital_status": demographics["Vital_Status"][0],
-        "cause_of_death": "Coming soon!",  # not exposed in htan-dcc.combined_assays.Demographics at the moment
+        "cause_of_death": "Not avaliable",  # not exposed in htan-dcc.combined_assays.Demographics at the moment
         "gender": demographics["Gender"][0],
         "race": demographics["Race"][0],
         "ethnicity": demographics["Ethnicity"][0],
@@ -192,8 +192,8 @@ def orate_miti(synid: str):
         "imaging_assay_type": annotations["ImagingAssayType"][0],
         "microscope": annotations["Microscope"][0],
         "objective": f"{annotations['NominalMagnification'][0]}X {annotations['Objective'][0]}",
-        "data_citation": "Coming soon!",
-        "story_citation": "Coming soon!",
+        "data_citation": "Not avaliable",
+        "story_citation": "Not avaliable",
         "htan_center": htan_centers[center_id],
         "data_file_id": annotations["HTANDataFileID"][0].replace("_", "\_"),
         "participant_id": provenance["HTAN_Participant_ID"][0].replace("_", "\_"),
