@@ -1,3 +1,18 @@
+## {data_file_id}
+
+{data_file_id} is a {imaging_assay_type} image contributed by the {htan_center} center.
+
+This [Minerva story](https://www.cycif.org/software/minerva), has been [automatically generated](https://github.com/Sage-Bionetworks-Workflows/nf-artist/) by the HTAN Data Coordinating Center.
+
+### Associated Identifiers
+
+Search for these identifiers in the [HTAN Data Portal](data.humantumoratlas.org) to learn more.
+
+**HTAN Data File ID:** {data_file_id}  
+**HTAN Participant ID:** {participant_id}  
+**HTAN Assayed Biospecimen ID:** {assayed_id}  
+**HTAN Originating Biospecimen ID:** {originating_id}
+
 ### Diagnosis
 
 **Age at Diagnosis**: {age_at_diagnosis}  
@@ -39,26 +54,3 @@
 **Fixative Type**: {fixative_type}  
 **Microscope**: {microscope}  
 **Objective**: {objective}
-
-## Publication and Data Availability
-
-### Associated Data:
-
-**Visit the [HTAN Data Portal](data.humantumoratlas.org) to learn more.**
-
-### Attribution:
-
-**Please cite the underlying data as:**  
-{data_citation}
-
-**Please cite this Minerva Story as:**  
-{story_citation}
-
-### Associated Identifiers
-
-| ID Type                         | ID               |
-| ------------------------------- | ---------------- |
-| HTAN Data File ID               | {data_file_id}   |
-| HTAN Participant ID             | {participant_id} |
-| HTAN Assayed Biospecimen ID     | {assayed_id}     |
-| HTAN Originating Biospecimen ID | {originating_id} |

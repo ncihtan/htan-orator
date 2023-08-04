@@ -14,7 +14,7 @@ syn = synapseclient.Synapse()
 syn.login(silent=True)
 
 
-def get_bq_table(id, id_col, component, folder = 'combined_assays'):
+def get_bq_table(id, id_col, component, folder="combined_assays"):
     # print(f'Getting {component} information from {id}')
 
     query = f"""
@@ -121,6 +121,7 @@ def orate(synid: str):
 
     return oration
 
+
 def orate_miti(synid: str):
     """Takes a Synapse ID of a HTAN Data File and returns a natural language description of the dataset"""
     # Get annotations
@@ -139,13 +140,19 @@ def orate_miti(synid: str):
     # Get diagnosis information
     diagnosis = get_bq_table(participant_id, "HTAN_Participant_Id", "Diagnosis")
 
-        # Get diagnosis information
+    # Get diagnosis information
     therapy = get_bq_table(participant_id, "HTAN_Participant_Id", "Therapy")
 
-    molecular_test = get_bq_table(participant_id, "HTAN_Participant_Id", "MolecularTest")
+    molecular_test = get_bq_table(
+        participant_id, "HTAN_Participant_Id", "MolecularTest"
+    )
 
-
-    provenance = get_bq_table(assayed_id, 'HTAN_Assayed_Biospecimen_Id', "biospecimen_ids", folder = 'id_provenance')
+    provenance = get_bq_table(
+        assayed_id,
+        "HTAN_Assayed_Biospecimen_Id",
+        "biospecimen_ids",
+        folder="id_provenance",
+    )
 
     # Look up the HTAN Center
 
@@ -158,65 +165,81 @@ def orate_miti(synid: str):
 
     # prepare values
     dictionary = {
-    "age_at_diagnosis" : days_to_age(diagnosis['Age_at_Diagnosis'][0]),
-    "primary_diagnosis" : diagnosis['Primary_Diagnosis'][0],
-    "site_of_resection_or_biopsy" : "Unknown", # not exposed in htan-dcc.combined_assays.Biospecimen at the moment,
-    "tumor_grade" : diagnosis['Tumor_Grade'][0],
-    "stage_at_diagnosis" : diagnosis['AJCC_Pathologic_Stage'][0],
-    "species" : "Human",
-    "vital_status" : demographics['Vital_Status'][0],
-    "cause_of_death" : "Coming soon!", # not exposed in htan-dcc.combined_assays.Demographics at the moment
-    "gender" : demographics['Gender'][0],
-    "race" : demographics['Race'][0],
-    "ethnicity" : demographics['Ethnicity'][0],
-    "therapy_type" : therapy['Treatment_Type'][0],
-    "therapy_agents" : therapy['Therapeutic_Agents'][0],
-    "therapy_regimen" : therapy['Regimen_or_Line_of_Therapy'][0],
-    "initial_disease_status" : therapy['Initial_Disease_Status'][0],
-    "progression" : diagnosis['Progression_or_Recurrence'][0],
-    "last_known_disease_status" : diagnosis['Last_Known_Disease_Status'][0],
-    "age_at_follow_up" : days_to_age(int(diagnosis['Age_at_Diagnosis'][0]) + int(diagnosis['Days_to_Last_Follow_up'][0])),
-    "days_to_progression" : "Coming soon!",  # not exposed in htan-dcc.combined_assays.Diagnosis at the moment
-    "biospecimen_type" : biospecimen['Acquisition_Method_Type'][0],
-    "fixative_type" : biospecimen['Fixative_Type'][0],
-    "imaging_assay_type" : annotations['ImagingAssayType'][0],
-    "microscope" : annotations['Microscope'][0],
-    "objective" : f"{annotations['NominalMagnification'][0]}X {annotations['Objective'][0]}",
-    "data_citation" : "Coming soon!",
-    "story_citation" : "Coming soon!",
-    "htan_center" : htan_centers[center_id],
-    "data_file_id" : annotations['HTANDataFileID'][0],
-    "participant_id" : provenance["HTAN_Participant_ID"][0],
-    "assayed_id" : annotations["HTANParentBiospecimenID"][0],
-    "originating_id" : provenance["HTAN_Originating_Biospecimen_ID"][0]
+        "age_at_diagnosis": days_to_age(diagnosis["Age_at_Diagnosis"][0]),
+        "primary_diagnosis": diagnosis["Primary_Diagnosis"][0],
+        "site_of_resection_or_biopsy": "Unknown",  # not exposed in htan-dcc.combined_assays.Biospecimen at the moment,
+        "tumor_grade": diagnosis["Tumor_Grade"][0],
+        "stage_at_diagnosis": diagnosis["AJCC_Pathologic_Stage"][0],
+        "species": "Human",
+        "vital_status": demographics["Vital_Status"][0],
+        "cause_of_death": "Coming soon!",  # not exposed in htan-dcc.combined_assays.Demographics at the moment
+        "gender": demographics["Gender"][0],
+        "race": demographics["Race"][0],
+        "ethnicity": demographics["Ethnicity"][0],
+        "therapy_type": therapy["Treatment_Type"][0],
+        "therapy_agents": therapy["Therapeutic_Agents"][0],
+        "therapy_regimen": therapy["Regimen_or_Line_of_Therapy"][0],
+        "initial_disease_status": therapy["Initial_Disease_Status"][0],
+        "progression": diagnosis["Progression_or_Recurrence"][0],
+        "last_known_disease_status": diagnosis["Last_Known_Disease_Status"][0],
+        "age_at_follow_up": days_to_age(
+            int(diagnosis["Age_at_Diagnosis"][0])
+            + int(diagnosis["Days_to_Last_Follow_up"][0])
+        ),
+        "days_to_progression": "Coming soon!",  # not exposed in htan-dcc.combined_assays.Diagnosis at the moment
+        "biospecimen_type": biospecimen["Acquisition_Method_Type"][0],
+        "fixative_type": biospecimen["Fixative_Type"][0],
+        "imaging_assay_type": annotations["ImagingAssayType"][0],
+        "microscope": annotations["Microscope"][0],
+        "objective": f"{annotations['NominalMagnification'][0]}X {annotations['Objective'][0]}",
+        "data_citation": "Coming soon!",
+        "story_citation": "Coming soon!",
+        "htan_center": htan_centers[center_id],
+        "data_file_id": annotations["HTANDataFileID"][0].replace("_", "\_"),
+        "participant_id": provenance["HTAN_Participant_ID"][0].replace("_", "\_"),
+        "assayed_id": annotations["HTANParentBiospecimenID"][0].replace("_", "\_"),
+        "originating_id": provenance["HTAN_Originating_Biospecimen_ID"][0].replace(
+            "_", "\_"
+        ),
     }
 
-    if dictionary['vital_status'] != 'Dead':
-        dictionary['cause_of_death'] = 'Not applicable'
+    if dictionary["vital_status"] != "Dead":
+        dictionary["cause_of_death"] = "Not applicable"
 
     with open("miti_fstring.md") as file:
         miti_fstring = file.read()
 
     formatted = miti_fstring.format(**dictionary)
-    #user_input = "The answer is {foo} and {bar}"
-    #namespace = {'foo': 42, 'bar': 'spam, spam, spam, ham and eggs'}
-    #formatted = user_input.format(**namespace)
+    # user_input = "The answer is {foo} and {bar}"
+    # namespace = {'foo': 42, 'bar': 'spam, spam, spam, ham and eggs'}
+    # formatted = user_input.format(**namespace)
 
     return formatted
 
+
 def main():
-    parser = argparse.ArgumentParser(description='Run orate or orate_miti function based on the provided arguments')
-    parser.add_argument('synid', help='Input entity ID. Must have bene annotated with HTAN Imaging Level 2 templates')
-    parser.add_argument('--miti', action='store_true', help='If present, runs the orate_miti function. If not, runs the orate function.')
+    parser = argparse.ArgumentParser(
+        description="Run orate or orate_miti function based on the provided arguments"
+    )
+    parser.add_argument(
+        "synid",
+        help="Input entity ID. Must have bene annotated with HTAN Imaging Level 2 templates",
+    )
+    parser.add_argument(
+        "--miti",
+        action="store_true",
+        help="If present, runs the orate_miti function. If not, runs the orate function.",
+    )
 
     args = parser.parse_args()
-    
+
     if args.miti:
         miti = orate_miti(args.synid)
         print(miti)
     else:
         oration = orate(args.synid)
         print(oration)
+
 
 if __name__ == "__main__":
     main()

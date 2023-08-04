@@ -62,7 +62,9 @@ import orator
 
 orator.orate('syn24829433')
 ```
+
 CLI:
+
 ```
 python orate.py syn24829433
 ```
@@ -74,13 +76,14 @@ returns the following (inserted elements in <u>**_underlined bold italic_**</u>)
 
 ### Example 2: MITI for Minerva
 
-
 ```
 import orator
 
 orator.orate_miti('syn24829433')
 ```
+
 CLI:
+
 ```
 python orate.py syn24829433 --miti
 ```
