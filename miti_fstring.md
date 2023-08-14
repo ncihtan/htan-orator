@@ -53,4 +53,5 @@ Search for these identifiers in the [HTAN Data Portal](data.humantumoratlas.org)
 **Imaging Assay Type**: {imaging_assay_type}  
 **Fixative Type**: {fixative_type}  
 **Microscope**: {microscope}  
-**Objective**: {objective}
+**Objective**: {objective}  
+**Number of channels**: {size_c}

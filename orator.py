@@ -167,12 +167,12 @@ def orate_miti(synid: str):
     dictionary = {
         "age_at_diagnosis": days_to_age(diagnosis["Age_at_Diagnosis"][0]),
         "primary_diagnosis": diagnosis["Primary_Diagnosis"][0],
-        "site_of_resection_or_biopsy": "Not avaliable",  # not exposed in htan-dcc.combined_assays.Biospecimen at the moment,
+        "site_of_resection_or_biopsy": biospecimen["Site_of_Resection_or_Biopsy"][0],
         "tumor_grade": diagnosis["Tumor_Grade"][0],
         "stage_at_diagnosis": diagnosis["AJCC_Pathologic_Stage"][0],
         "species": "Human",
         "vital_status": demographics["Vital_Status"][0],
-        "cause_of_death": "Not avaliable",  # not exposed in htan-dcc.combined_assays.Demographics at the moment
+        "cause_of_death": demographics["Cause_of_Death"][0],
         "gender": demographics["Gender"][0],
         "race": demographics["Race"][0],
         "ethnicity": demographics["Ethnicity"][0],
@@ -186,12 +186,13 @@ def orate_miti(synid: str):
             int(diagnosis["Age_at_Diagnosis"][0])
             + int(diagnosis["Days_to_Last_Follow_up"][0])
         ),
-        "days_to_progression": "Coming soon!",  # not exposed in htan-dcc.combined_assays.Diagnosis at the moment
+        "days_to_progression": diagnosis["Days_to_Progression"][0],
         "biospecimen_type": biospecimen["Acquisition_Method_Type"][0],
         "fixative_type": biospecimen["Fixative_Type"][0],
         "imaging_assay_type": annotations["ImagingAssayType"][0],
         "microscope": annotations["Microscope"][0],
         "objective": f"{annotations['NominalMagnification'][0]}X {annotations['Objective'][0]}",
+        "size_c": annotations["SizeC"][0],
         "data_citation": "Not avaliable",
         "story_citation": "Not avaliable",
         "htan_center": htan_centers[center_id],
