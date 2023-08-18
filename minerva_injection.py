@@ -4,41 +4,48 @@ import orator
 import re
 import boto3
 import sys
+import requests
+from bs4 import BeautifulSoup
 
-cloudfront_prefix = "https://d3p249wtgzkn5u.cloudfront.net/"
+session = boto3.session.Session(profile_name="tower")
+s3 = session.resource("s3")
 
-exhibit_url = sys.argv[1]
 
-synid = re.match(r".+(syn\d+).+", exhibit_url).group(1)
+exhibit_key = sys.argv[1] + "exhibit.json"
+index_key = sys.argv[1] + "index.html"
+bucket = "htan-project-tower-bucket"
 
-with urllib.request.urlopen(exhibit_url) as url:
-    exhibit = json.load(url)
+exhibit_s3object = s3.Object(bucket, exhibit_key)
+exhibit = exhibit_s3object.get()["Body"].read()
+exhibit = json.loads(exhibit.decode("UTF-8"))
 
-description = exhibit["Stories"][0]["Description"]
 
-#print(description)
+index_s3object = s3.Object(bucket, index_key)
+index = index_s3object.get()["Body"].read().decode("UTF-8")
+
+# print(index)
+
+synid = re.match(r".+(syn\d+).+", exhibit_key).group(1)
 
 oration = orator.orate_miti(synid)
 
-oration_ready = oration
+print(oration)
+
+oration_ready = (
+    oration.replace("\n", "\\n")
+    .replace("False", "false")
+    .replace("'", '"')
+    .replace("_", "\_")
+)
 
 new_exhibit = exhibit
 new_exhibit["Header"] = oration_ready
 
-#print(new_exhibit)
+new_index = re.sub(r"exhibit: \{.+\}", "exhibit: " + str(new_exhibit), index)
 
-import boto3
+# exhibit_s3object = s3.Object(bucket, sys.argv[1] + "exhibit2.json")
+# index_s3object = s3.Object(bucket, sys.argv[1] + "index2.html")
 
-session = boto3.session.Session(profile_name="htan-dev")
-s3 = session.resource("s3")
+exhibit_s3object.put(Body=(bytes(json.dumps(new_exhibit).encode("UTF-8"))))
 
-key = exhibit_url.replace(cloudfront_prefix, "")
-bucket = "htan-assets"
-
-s3object = s3.Object(bucket, key)
-
-print(key)
-
-s3object.put(
-    Body=(bytes(json.dumps(new_exhibit).encode("UTF-8")))
-)
+index_s3object.put(Body=(bytes(new_index.encode("UTF-8"))))

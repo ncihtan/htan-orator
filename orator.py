@@ -126,6 +126,7 @@ def orate_miti(synid: str):
     """Takes a Synapse ID of a HTAN Data File and returns a natural language description of the dataset"""
     # Get annotations
     annotations = syn.get_annotations(synid)
+    entity = syn.get(synid, downloadFile=False)
 
     # Get biospecimen information
     assayed_id = annotations["HTANParentBiospecimenID"][0]
@@ -163,9 +164,22 @@ def orate_miti(synid: str):
     else:
         assay = annotations["Component"][0]
 
+    try:
+        age_at_diagnosis = days_to_age(diagnosis["Age_at_Diagnosis"][0])
+    except:
+        age_at_diagnosis = "Unknown"
+
+    try:
+        age_at_follow_up = days_to_age(
+            int(diagnosis["Age_at_Diagnosis"][0])
+            + int(diagnosis["Days_to_Last_Follow_up"][0])
+        )
+    except:
+        age_at_follow_up = "Unknown"
+
     # prepare values
     dictionary = {
-        "age_at_diagnosis": days_to_age(diagnosis["Age_at_Diagnosis"][0]),
+        "age_at_diagnosis": age_at_diagnosis,
         "primary_diagnosis": diagnosis["Primary_Diagnosis"][0],
         "site_of_resection_or_biopsy": biospecimen["Site_of_Resection_or_Biopsy"][0],
         "tumor_grade": diagnosis["Tumor_Grade"][0],
@@ -182,10 +196,7 @@ def orate_miti(synid: str):
         "initial_disease_status": therapy["Initial_Disease_Status"][0],
         "progression": diagnosis["Progression_or_Recurrence"][0],
         "last_known_disease_status": diagnosis["Last_Known_Disease_Status"][0],
-        "age_at_follow_up": days_to_age(
-            int(diagnosis["Age_at_Diagnosis"][0])
-            + int(diagnosis["Days_to_Last_Follow_up"][0])
-        ),
+        "age_at_follow_up": age_at_follow_up,
         "days_to_progression": diagnosis["Days_to_Progression"][0],
         "biospecimen_type": biospecimen["Acquisition_Method_Type"][0],
         "fixative_type": biospecimen["Fixative_Type"][0],
@@ -196,13 +207,16 @@ def orate_miti(synid: str):
         "data_citation": "Not avaliable",
         "story_citation": "Not avaliable",
         "htan_center": htan_centers[center_id],
-        "data_file_id": annotations["HTANDataFileID"][0].replace("_", "\_"),
-        "participant_id": provenance["HTAN_Participant_ID"][0].replace("_", "\_"),
-        "assayed_id": annotations["HTANParentBiospecimenID"][0].replace("_", "\_"),
-        "originating_id": provenance["HTAN_Originating_Biospecimen_ID"][0].replace(
-            "_", "\_"
-        ),
+        "data_file_name": entity["name"],
+        "data_file_id": annotations["HTANDataFileID"][0],
+        "participant_id": provenance["HTAN_Participant_ID"][0],
+        "assayed_id": annotations["HTANParentBiospecimenID"][0],
+        "originating_id": provenance["HTAN_Originating_Biospecimen_ID"][0],
     }
+
+    for key, value in dictionary.items():
+        if type(value) == str:
+            dictionary[key] = value.replace("_", "\_")
 
     if dictionary["vital_status"] != "Dead":
         dictionary["cause_of_death"] = "Not applicable"

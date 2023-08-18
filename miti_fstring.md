@@ -6,10 +6,11 @@
 
 Search for these identifiers in the [HTAN Data Portal](https://data.humantumoratlas.org) to learn more.
 
-**HTAN Data File ID:** {data_file_id}  
-**HTAN Participant ID:** {participant_id}  
-**HTAN Assayed Biospecimen ID:** {assayed_id}  
-**HTAN Originating Biospecimen ID:** {originating_id}
+**File Name** {data_file_name}  
+**Data File ID:** {data_file_id}  
+**Participant ID:** {participant_id}  
+**Assayed Biospecimen ID:** {assayed_id}  
+**Originating Biospecimen ID:** {originating_id}
 
 ### Diagnosis
 
