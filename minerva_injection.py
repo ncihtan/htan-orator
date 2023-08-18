@@ -16,7 +16,7 @@ with urllib.request.urlopen(exhibit_url) as url:
 
 description = exhibit["Stories"][0]["Description"]
 
-print(description)
+#print(description)
 
 oration = orator.orate_miti(synid)
 
@@ -25,7 +25,7 @@ oration_ready = oration
 new_exhibit = exhibit
 new_exhibit["Header"] = oration_ready
 
-print(new_exhibit)
+#print(new_exhibit)
 
 import boto3
 
@@ -40,6 +40,5 @@ s3object = s3.Object(bucket, key)
 print(key)
 
 s3object.put(
-    Body=(bytes(json.dumps(new_exhibit).encode("UTF-8"))),
-    Metadata={"Cache-Control": "max-age=60"},
+    Body=(bytes(json.dumps(new_exhibit).encode("UTF-8")))
 )
